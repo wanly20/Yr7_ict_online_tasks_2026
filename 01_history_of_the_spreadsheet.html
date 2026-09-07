@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The History of the Spreadsheet — Video Task</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  .video-frame { position: relative; width: 100%; padding-top: 56.25%; border-radius: 12px; overflow: hidden; background:#000; }
+  .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .q.correct { border-color:#16a34a; background:#f0fdf4; }
+  .q.incorrect { border-color:#dc2626; background:#fef2f2; }
+  .q .feedback { display:none; margin-top:.6rem; font-size:.9rem; font-weight:600; }
+  .q.correct .feedback, .q.incorrect .feedback { display:block; }
+  .q.correct .feedback { color:#15803d; }
+  .q.incorrect .feedback { color:#b91c1c; }
+  input[type="text"]:focus { outline: 2px solid #2563eb; outline-offset: 1px; }
+  .opt { cursor:pointer; }
+  .opt:hover { background:#eff6ff; }
+  /* Don't let the pinned video eat a short screen (landscape phones, small windows) */
+  @media (max-height: 480px) {
+    .sticky-col { position: static !important; max-height: none !important; overflow: visible !important; }
+  }
+  @media print {
+    .no-print { display:none !important; }
+    .sticky-col { position: static !important; max-height: none !important; overflow: visible !important; }
+    .q .feedback { display:block !important; }
+    .q { break-inside: avoid; }
+  }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<div class="max-w-7xl mx-auto px-4 py-6">
+
+  <header class="mb-6">
+    <p class="text-sm font-bold uppercase tracking-wide text-blue-600">Home learning task</p>
+    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900">The History of the Spreadsheet</h1>
+    <p class="mt-2 text-slate-600 max-w-3xl">
+      Watch the TED talk <em>“Meet the inventor of the electronic spreadsheet”</em> by <strong>Dan Bricklin</strong>
+      and answer the questions as you go. It is fine to pause and rewind — in fact, you should.
+      When you have finished, press <strong>Check my answers</strong> at the bottom, then follow your teacher's
+      instructions for handing it in (screenshot your score, or use <strong>Copy results</strong> / <strong>Print</strong>).
+    </p>
+  </header>
+
+  <div class="lg:flex lg:gap-8">
+
+    <!-- LEFT: video + controls + section map.  display:contents on mobile so the
+         video can stick to the top of the whole page; a real sticky sidebar on lg. -->
+    <aside class="contents lg:block lg:w-[460px] lg:flex-shrink-0">
+      <div class="sticky-col contents lg:block lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto lg:px-1 lg:-mx-1 space-y-4">
+
+        <div class="sticky-col sticky top-0 z-40 bg-slate-100 pb-2 lg:static lg:z-auto lg:bg-transparent lg:pb-0">
+          <div class="video-frame shadow-lg">
+            <iframe
+              src="https://www.youtube.com/embed/YDvbDiJZpy0?rel=0"
+              title="Meet the inventor of the electronic spreadsheet | Dan Bricklin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500">
+          Video not showing?
+          <a href="https://youtu.be/YDvbDiJZpy0" target="_blank" rel="noopener"
+             class="font-semibold text-blue-600 hover:underline">Watch it on YouTube&nbsp;↗</a>
+        </p>
+
+        <div class="bg-white rounded-xl shadow p-4 space-y-3 no-print">
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-bold text-slate-700" for="studentName">Your name</label>
+              <input id="studentName" type="text" placeholder="First and last"
+                class="mt-1 w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700" for="studentClass">Class (optional)</label>
+              <input id="studentClass" type="text" placeholder="e.g. 7B"
+                class="mt-1 w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-sm">
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 text-sm text-slate-600">
+            <span class="whitespace-nowrap">Answered <span id="answeredCount" class="font-bold text-slate-900">0</span> / <span id="totalCount">0</span></span>
+            <span class="h-2 flex-1 rounded-full bg-slate-200 overflow-hidden">
+              <span id="progressBar" class="block h-full bg-blue-500 w-0 transition-all"></span>
+            </span>
+          </div>
+
+          <div id="scoreBox" class="hidden rounded-lg bg-blue-50 border border-blue-200 p-3 text-center">
+            <div class="text-3xl font-extrabold text-blue-800"><span id="scoreNum">0</span> / <span id="scoreDen">0</span></div>
+            <div class="text-blue-700 font-semibold"><span id="scorePct">0</span>%</div>
+          </div>
+
+          <button id="checkBtnSide" class="w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5">
+            Check my answers
+          </button>
+          <div id="sideActions" class="hidden grid grid-cols-2 gap-2">
+            <button id="copyBtn" class="rounded-lg bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold py-2">Copy results</button>
+            <button id="printBtn" class="rounded-lg bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold py-2">Print / PDF</button>
+          </div>
+          <button id="resetBtn" class="w-full text-xs text-slate-400 hover:text-red-600">Clear all my answers</button>
+        </div>
+
+        <nav class="bg-white rounded-xl shadow p-3 no-print hidden lg:block">
+          <p class="px-1 pb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Jump to a section</p>
+          <ul id="sectionNavList" class="space-y-0.5 text-sm"></ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- RIGHT: questions -->
+    <div class="lg:flex-1 mt-6 lg:mt-0 min-w-0">
+      <div id="quiz" class="space-y-6"></div>
+
+      <div class="mt-8 bg-white rounded-xl shadow p-5 no-print">
+        <button id="checkBtnMain" class="w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold py-3">
+          Check my answers
+        </button>
+        <p id="checkHint" class="mt-2 text-center text-sm text-slate-500">
+          You can check as many times as you like. Your answers are saved in this browser automatically.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="mt-10 text-center text-xs text-slate-400">
+    Video: “Meet the inventor of the electronic spreadsheet” by Dan Bricklin (TEDxBeaconStreet). Embedded from YouTube.
+  </footer>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Question data. type: "mc" (multiple choice), "tf" (true/false), "text".
+//  - mc/tf: answer = index of correct option
+//  - text : accept = [normalised acceptable answers], answer = shown answer, hint = grey helper
+// ---------------------------------------------------------------------------
+const SECTIONS = [
+  {
+    title: "1. Before we start — what VisiCalc changed",
+    time: "≈ 0:00–1:30",
+    questions: [
+      { type:"mc", q:"Dan opens by asking who has ever run a business using a spreadsheet done by hand — like whom?",
+        options:["His old professor at MIT","His dad, for his small printing business in Philadelphia","Steve Jobs","His friend Bob Frankston"], answer:1 },
+      { type:"text", q:"The idea Dan started working on in early 1978 eventually became ______.",
+        hint:"one word — the product name", accept:["visicalc","visi calc"], answer:"VisiCalc" },
+      { type:"text", q:"VisiCalc first shipped running on a new personal computer: the Apple ______.",
+        hint:"a number", accept:["ii","2","two","apple ii","apple 2"], answer:"II (the Apple II)" },
+      { type:"mc", q:"Six years later, which newspaper ran an editorial that assumed readers already knew what VisiCalc was?",
+        options:["The New York Times","The Wall Street Journal","The Kansas City Star","The Boston Globe"], answer:1 },
+      { type:"mc", q:"In 1990, who said VisiCalc “propelled the success of Apple more than any other single event”?",
+        options:["Bill Gates","Dan Bricklin","Steve Jobs","Bob Frankston"], answer:2 },
+      { type:"tf", q:"Steve Jobs said that if VisiCalc had been written for some other computer, “you'd be interviewing somebody else right now.”",
+        options:["True","False"], answer:0 },
+      { type:"text", q:"Dan says VisiCalc was key to getting personal computers onto ______ desks.",
+        hint:"one word", accept:["business"], answer:"business" },
+    ]
+  },
+  {
+    title: "2. Young Dan — MIT and Multics",
+    time: "≈ 1:30–3:00",
+    questions: [
+      { type:"text", q:"In what year did Dan first learn to program?",
+        hint:"a year", accept:["1966"], answer:"1966" },
+      { type:"text", q:"How old was Dan when he learned to program?",
+        hint:"a number", accept:["15","fifteen"], answer:"15" },
+      { type:"mc", q:"Before going to college, Dan mentions “sleeping in the mud” at which event?",
+        options:["A Scout camp","Woodstock","An MIT hackathon","A computer fair"], answer:1 },
+      { type:"text", q:"At MIT, to earn money, Dan worked on the ______ Project.",
+        hint:"one word", accept:["multics"], answer:"Multics" },
+      { type:"mc", q:"Which two well-known operating systems does Dan say came out of Multics?",
+        options:["Windows and DOS","Linux and Unix","macOS and iOS","Android and Chrome OS"], answer:1 },
+      { type:"text", q:"Multics was a trailblazing interactive ______ system.",
+        hint:"two words (with a hyphen)", accept:["time sharing","timesharing"], answer:"time-sharing" },
+      { type:"mc", q:"The interpreted computer languages Dan worked on were used by people in which kind of fields?",
+        options:["Computer science fields","Non-computer fields, to do calculations at a terminal","Only maths research","Government spy agencies"], answer:1 },
+    ]
+  },
+  {
+    title: "3. Working at Digital Equipment Corporation (DEC)",
+    time: "≈ 3:00–4:30",
+    questions: [
+      { type:"text", q:"“Digital Equipment Corporation” is usually shortened to ______.",
+        hint:"three letters", accept:["dec","digital equipment corporation"], answer:"DEC" },
+      { type:"mc", q:"At DEC, Dan first worked on software for which new area?",
+        options:["Computerized typesetting","Video games","Electronic spreadsheets","Air-traffic control"], answer:0 },
+      { type:"text", q:"He helped newspapers replace their reporters' ______ with computer terminals.",
+        hint:"one word", accept:["typewriters","typewriter"], answer:"typewriters" },
+      { type:"mc", q:"He went out “into the field” to train users and get feedback at which newspaper?",
+        options:["The New York Times","The Wall Street Journal","The Kansas City Star","The Philadelphia Inquirer"], answer:2 },
+      { type:"tf", q:"Dan was project leader for the software of DEC's first word processor.",
+        options:["True","False"], answer:0 },
+      { type:"text", q:"For typesetting and word processing, the user interface had to be both natural and ______ for non-computer people.",
+        hint:"one word", accept:["efficient"], answer:"efficient" },
+    ]
+  },
+  {
+    title: "4. Deciding to go to business school",
+    time: "≈ 4:30–5:40",
+    questions: [
+      { type:"mc", q:"After DEC, Dan joined a small company that made microprocessor-based electronic cash registers for which industry?",
+        options:["Supermarkets","The fast-food industry","Petrol stations","Banks"], answer:1 },
+      { type:"text", q:"Dan had always wanted to start a company with his friend Bob ______.",
+        hint:"surname", accept:["frankston"], answer:"Frankston" },
+      { type:"mc", q:"Where had Dan first met Bob Frankston?",
+        options:["At Harvard Business School","At DEC","On the Multics project at MIT","At Woodstock"], answer:2 },
+      { type:"text", q:"In the autumn of which year did Dan enter the MBA program at Harvard Business School?",
+        hint:"a year", accept:["1977"], answer:"1977" },
+      { type:"tf", q:"Dan was one of only a small percentage of students there who had a background in computer programming.",
+        options:["True","False"], answer:0 },
+    ]
+  },
+  {
+    title: "5. Learning by the case method",
+    time: "≈ 5:40–7:15",
+    questions: [
+      { type:"text", q:"At Harvard, students learned by the ______ method.",
+        hint:"one word", accept:["case"], answer:"case" },
+      { type:"mc", q:"About how many cases did the students work through each day?",
+        options:["One","Three","Ten","Twenty"], answer:1 },
+      { type:"mc", q:"How long were the cases?",
+        options:["A single page","Up to a few dozen pages","Around 200 pages","One paragraph"], answer:1 },
+      { type:"text", q:"Cases often included ______ — pages of words and numbers laid out for that particular situation.",
+        hint:"one word, plural", accept:["exhibits","exhibit"], answer:"exhibits" },
+      { type:"mc", q:"For Halloween, Dan dressed up as a ______.",
+        options:["Mainframe","Calculator","Spreadsheet","Professor"], answer:1 },
+      { type:"text", q:"A student would dictate information that the professor wrote onto the many motorized ______ at the front of the class.",
+        hint:"one word, plural", accept:["blackboards","blackboard","chalkboards","chalkboard"], answer:"blackboards" },
+      { type:"tf", q:"Students were graded partly on class participation.",
+        options:["True","False"], answer:0 },
+      { type:"text", q:"How many OTHER people were in Dan's class (sitting there with him)?",
+        hint:"a number", accept:["87","eighty seven","eighty-seven"], answer:"87" },
+      { type:"mc", q:"What did Dan find really frustrating about doing the homework by hand?",
+        options:["It took him all night","One early mistake made all the other numbers wrong, so he couldn't take part as well","The professor kept losing his work","His calculator ran out of battery"], answer:1 },
+    ]
+  },
+  {
+    title: "6. The daydream — imagining the tool",
+    time: "≈ 7:15–8:40",
+    questions: [
+      { type:"mc", q:"Most programmers in those days worked on mainframes, building things like:",
+        options:["Websites and apps","Inventory, payroll and bill-paying systems","Video games","Spreadsheets"], answer:1 },
+      { type:"text", q:"Dan imagined a “magic ______” where, if you changed one number, all the other numbers would update automatically.",
+        hint:"one word", accept:["blackboard","black board"], answer:"blackboard" },
+      { type:"text", q:"He described his idea as “like word processing with ______.”",
+        hint:"one word", accept:["numbers","number"], answer:"numbers" },
+      { type:"text", q:"He imagined his calculator with ______ hardware on the bottom of it.",
+        hint:"one word — a pointing device", accept:["mouse"], answer:"mouse" },
+      { type:"mc", q:"He imagined a head-up display “like in”:",
+        options:["A fighter plane","A car","A cinema","A submarine"], answer:0 },
+      { type:"text", q:"In the middle of a negotiation, he pictured circling some numbers and pressing the ______ button.",
+        hint:"one word — an operation", accept:["sum","add","total"], answer:"sum" },
+    ]
+  },
+  {
+    title: "7. Prototyping",
+    time: "≈ 8:40–9:20",
+    questions: [
+      { type:"mc", q:"Who taught Dan about prototyping (making a simple working version first)?",
+        options:["His MIT professor","His father","Bob Frankston","Steve Jobs"], answer:1 },
+      { type:"text", q:"Dan's dad made mock-ups to plan the layout of the ______ he was printing.",
+        hint:"one word, plural — printed booklets", accept:["brochures","brochure"], answer:"brochures" },
+      { type:"tf", q:"Dan's dad used the mock-ups to get customer feedback and approval before sending the job to the presses.",
+        options:["True","False"], answer:0 },
+      { type:"mc", q:"According to Dan, making a simple working version of what you're building forces you to:",
+        options:["Spend more money","Uncover the key problems early, and solve them more cheaply","Finish the product faster","Skip the design stage"], answer:1 },
+      { type:"mc", q:"Dan built his prototype on a video terminal connected to:",
+        options:["An Apple II","Harvard's time-sharing system","The MIT Multics system","A DEC word processor"], answer:1 },
+    ]
+  },
+  {
+    title: "8. The hard design problem — naming things",
+    time: "≈ 9:20–11:00",
+    questions: [
+      { type:"text", q:"One of the first problems Dan ran into was: how do you represent ______ inside formulas?",
+        hint:"one word, plural", accept:["values","value"], answer:"values" },
+      { type:"mc", q:"His first idea (“the programmer way”) was to:",
+        options:["Give every value a number automatically","Ask the user to type in a unique name for each value","Lay everything out on a grid","Colour-code the values"], answer:1 },
+      { type:"mc", q:"Why did Dan reject making the user type a unique name every time?",
+        options:["The computer couldn't store the names","It was going to be far too tedious","The names kept clashing","Users found it too easy"], answer:1 },
+      { type:"mc", q:"His second idea was to name the values by:",
+        options:["Their position on a grid","The order in which you create them (value 1, value 2, …)","Their colour","The formula that uses them"], answer:1 },
+      { type:"mc", q:"Why did “value 1, value 2, value 3…” not work well?",
+        options:["The computer ran out of memory","With more than a few values, you'd never remember where each one was on the screen","It was too slow to type","Users found it boring"], answer:1 },
+      { type:"text", q:"His winning solution was to restrict the user to a ______.",
+        hint:"one word", accept:["grid"], answer:"grid" },
+      { type:"mc", q:"On Dan's grid, what went where?",
+        options:["Numbers across the top, letters down the side","Letters across the top, numbers down the side","Colours across the top, numbers down the side","Letters both across the top and down the side"], answer:1 },
+      { type:"text", q:"So if you saw the reference ______ in a formula, you'd know exactly where it was on the screen. (Dan's example: a letter followed by a number.)",
+        hint:"one letter + one number", accept:["b7"], answer:"B7" },
+      { type:"mc", q:"Restricting things to a grid also opened up new abilities, such as:",
+        options:["Adding pictures to cells","Being able to select ranges of cells","Printing in colour","Saving to the cloud"], answer:1 },
+      { type:"tf", q:"Even with the grid, you could still put any value or any formula into any cell.",
+        options:["True","False"], answer:0 },
+      { type:"mc", q:"Dan says spreadsheets still work this same way today — how long later?",
+        options:["About 10 years","About 20 years","Almost 40 years","Exactly 100 years"], answer:2 },
+    ]
+  },
+  {
+    title: "9. Building VisiCalc with Bob",
+    time: "≈ 11:00–12:20",
+    questions: [
+      { type:"text", q:"Dan wrote a ______ card to act as the documentation and to check the design could be explained clearly.",
+        hint:"one word", accept:["reference"], answer:"reference" },
+      { type:"mc", q:"Where did Bob Frankston actually write the code?",
+        options:["A Harvard computer lab","The attic of his rented apartment in Arlington, Massachusetts","An office at MIT","Dan's dad's print shop"], answer:1 },
+      { type:"text", q:"Bob bought time on the MIT ______ System to write the computer code.",
+        hint:"one word — same system as before", accept:["multics"], answer:"Multics" },
+      { type:"mc", q:"How did Bob get the test versions onto the borrowed Apple II?",
+        options:["On a floppy disk","Over a phone line, using an acoustic coupler","By typing it all in by hand","On a cassette tape"], answer:1 },
+      { type:"mc", q:"Which class case was Dan preparing when Print and Save weren't working yet?",
+        options:["The Pepsi Challenge","The Coca-Cola case","The Apple case","The Woodstock case"], answer:0 },
+      { type:"text", q:"Because Save didn't work, every time the program crashed Dan had to type in all of the ______ again.",
+        hint:"one word, plural", accept:["formulas","formulae","formula"], answer:"formulas" },
+      { type:"tf", q:"Using VisiCalc, Dan “aced the case,” doing five-year projections and lots of different scenarios.",
+        options:["True","False"], answer:0 },
+      { type:"mc", q:"When the professor asked why he hadn't used a ratio, what was the real reason Dan didn't say out loud?",
+        options:["Ratios weren't on the syllabus","Divide wasn't working yet","He had forgotten how","He had run out of time"], answer:1 },
+    ]
+  },
+  {
+    title: "10. Launch and legacy",
+    time: "≈ 12:20–end",
+    questions: [
+      { type:"mc", q:"Who printed the sample reference card that was used as marketing material?",
+        options:["Harvard","Dan's dad","Apple","The publisher"], answer:1 },
+      { type:"text", q:"In which year was VisiCalc both announced to the world and then shipped?",
+        hint:"a year", accept:["1979"], answer:"1979" },
+      { type:"mc", q:"VisiCalc was announced at the giant National Computer Conference in which city?",
+        options:["Boston","San Francisco","New York City","Philadelphia"], answer:2 },
+      { type:"mc", q:"Which newspaper's article ended with the line “All hail VISICALC”?",
+        options:["The Wall Street Journal","The New York Times","The Boston Globe","The Kansas City Star"], answer:1 },
+      { type:"text", q:"After that, the electronic spreadsheet was not mentioned in the popular business press for about ______ years.",
+        hint:"a number", accept:["two","2","two years","2 years"], answer:"two" },
+      { type:"mc", q:"In which month of 1979 did VisiCalc actually ship?",
+        options:["January","June","October","December"], answer:2 },
+      { type:"text", q:"Harvard later put up a ______ in that classroom to commemorate what happened there.",
+        hint:"one word — a commemorative sign", accept:["plaque"], answer:"plaque" },
+      { type:"mc", q:"Dan's closing advice: take your unique background, skills and needs and build ______ to discover the key problems — and change the world.",
+        options:["Companies","Prototypes","Spreadsheets","Calculators"], answer:1 },
+    ]
+  }
+];
+
+// ---------------------------------------------------------------------------
+const STORAGE_KEY = "spreadsheet-video-task-v1";
+const quizEl = document.getElementById("quiz");
+let flat = []; // {globalNo, sectionIndex, q}
+
+function normalise(s){
+  return (s||"")
+    .toLowerCase()
+    .replace(/[-_/]/g," ")
+    .replace(/[.,!?;:'"()]/g,"")
+    .replace(/\s+/g," ")
+    .trim()
+    .replace(/^(the|a|an|about|around|approximately)\s+/,"");
+}
+
+// build DOM
+const navList = document.getElementById("sectionNavList");
+let counter = 0;
+SECTIONS.forEach((sec, si) => {
+  const secWrap = document.createElement("section");
+  secWrap.className = "bg-white rounded-xl shadow p-5";
+  secWrap.id = "sec-" + si;
+  secWrap.style.scrollMarginTop = "1rem";
+  secWrap.innerHTML = `
+    <div class="flex items-baseline justify-between gap-3 border-b border-slate-200 pb-2 mb-4">
+      <h2 class="text-lg md:text-xl font-extrabold text-slate-900">${sec.title}</h2>
+      <span class="text-xs font-semibold text-blue-600 whitespace-nowrap">${sec.time}</span>
+    </div>`;
+
+  const navItem = document.createElement("li");
+  navItem.innerHTML = `<a href="#sec-${si}"
+      class="flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-slate-600 hover:bg-blue-50 hover:text-blue-700">
+      <span class="truncate">${sec.title}</span>
+      <span data-navcount="${si}" class="shrink-0 text-xs font-semibold text-slate-400">0/${sec.questions.length}</span>
+    </a>`;
+  navList.appendChild(navItem);
+
+  const list = document.createElement("div");
+  list.className = "space-y-4";
+
+  sec.questions.forEach(q => {
+    counter++;
+    const no = counter;
+    flat.push({ no, si, q });
+    const card = document.createElement("div");
+    card.className = "q rounded-lg border-2 border-slate-200 p-4 transition-colors";
+    card.dataset.no = no;
+
+    let body = `<p class="font-semibold text-slate-800"><span class="text-blue-600">Q${no}.</span> ${q.q}</p>`;
+
+    if (q.type === "mc" || q.type === "tf") {
+      body += `<div class="mt-3 space-y-2">`;
+      q.options.forEach((opt, oi) => {
+        body += `
+          <label class="opt flex items-start gap-2 rounded-md px-2 py-1.5 border border-transparent">
+            <input type="radio" name="q${no}" value="${oi}" class="mt-1">
+            <span>${opt}</span>
+          </label>`;
+      });
+      body += `</div>`;
+    } else {
+      body += `
+        <div class="mt-3">
+          <input type="text" name="q${no}" autocomplete="off" spellcheck="false"
+            class="w-full sm:w-96 rounded-lg border border-slate-300 px-3 py-2"
+            placeholder="Type your answer">
+          ${q.hint ? `<span class="ml-2 text-xs text-slate-400">(${q.hint})</span>` : ``}
+        </div>`;
+    }
+
+    body += `<p class="feedback"></p>`;
+    card.innerHTML = body;
+    list.appendChild(card);
+  });
+
+  secWrap.appendChild(list);
+  quizEl.appendChild(secWrap);
+});
+
+document.getElementById("totalCount").textContent = flat.length;
+document.getElementById("scoreDen").textContent = flat.length;
+
+// ---- persistence ----
+function collect(){
+  const data = { name:"", cls:"", answers:{} };
+  data.name = document.getElementById("studentName").value;
+  data.cls  = document.getElementById("studentClass").value;
+  flat.forEach(({no, q}) => {
+    if (q.type === "text") {
+      const el = document.querySelector(`input[name="q${no}"]`);
+      if (el && el.value.trim()) data.answers[no] = el.value;
+    } else {
+      const el = document.querySelector(`input[name="q${no}"]:checked`);
+      if (el) data.answers[no] = el.value;
+    }
+  });
+  return data;
+}
+function save(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collect())); } catch(e){}
+  updateAnsweredCount();
+}
+function restore(){
+  let data;
+  try { data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch(e){ data = {}; }
+  if (!data) return;
+  if (data.name) document.getElementById("studentName").value = data.name;
+  if (data.cls)  document.getElementById("studentClass").value = data.cls;
+  const ans = data.answers || {};
+  Object.keys(ans).forEach(no => {
+    const q = flat.find(f => f.no == no);
+    if (!q) return;
+    if (q.q.type === "text") {
+      const el = document.querySelector(`input[name="q${no}"]`);
+      if (el) el.value = ans[no];
+    } else {
+      const el = document.querySelector(`input[name="q${no}"][value="${ans[no]}"]`);
+      if (el) el.checked = true;
+    }
+  });
+  updateAnsweredCount();
+}
+function updateAnsweredCount(){
+  let n = 0;
+  const secCounts = SECTIONS.map(() => 0);
+  flat.forEach(({no, si, q}) => {
+    let answered;
+    if (q.type === "text") {
+      const el = document.querySelector(`input[name="q${no}"]`);
+      answered = !!(el && el.value.trim());
+    } else {
+      answered = !!document.querySelector(`input[name="q${no}"]:checked`);
+    }
+    if (answered) { n++; secCounts[si]++; }
+  });
+  document.getElementById("answeredCount").textContent = n;
+  const bar = document.getElementById("progressBar");
+  if (bar) bar.style.width = Math.round(n / flat.length * 100) + "%";
+  secCounts.forEach((c, si) => {
+    const el = document.querySelector(`[data-navcount="${si}"]`);
+    if (el && !el.dataset.graded) el.textContent = c + "/" + SECTIONS[si].questions.length;
+  });
+}
+
+quizEl.addEventListener("input", save);
+quizEl.addEventListener("change", save);
+document.getElementById("studentName").addEventListener("input", save);
+document.getElementById("studentClass").addEventListener("input", save);
+
+// ---- grading ----
+let lastResult = null;
+
+function grade(){
+  let correct = 0;
+  const perSection = SECTIONS.map(s => ({ title:s.title, got:0, total:s.questions.length }));
+  const wrong = [];
+
+  flat.forEach(({no, si, q}) => {
+    const card = quizEl.querySelector(`.q[data-no="${no}"]`);
+    const fb = card.querySelector(".feedback");
+    let isCorrect = false;
+    let given = "";
+
+    if (q.type === "text") {
+      const el = card.querySelector(`input[name="q${no}"]`);
+      given = el ? el.value : "";
+      const g = normalise(given);
+      isCorrect = g.length > 0 && q.accept.some(a => normalise(a) === g);
+    } else {
+      const el = card.querySelector(`input[name="q${no}"]:checked`);
+      given = el ? q.options[+el.value] : "";
+      isCorrect = el && (+el.value === q.answer);
+    }
+
+    card.classList.remove("correct","incorrect");
+    if (isCorrect) {
+      card.classList.add("correct");
+      fb.textContent = "✓ Correct";
+      correct++;
+      perSection[si].got++;
+    } else {
+      card.classList.add("incorrect");
+      const right = (q.type === "text") ? q.answer : q.options[q.answer];
+      fb.textContent = given.trim()
+        ? `✗ Not quite. Correct answer: ${right}`
+        : `✗ No answer given. Correct answer: ${right}`;
+      wrong.push(no);
+    }
+  });
+
+  const pct = Math.round((correct / flat.length) * 100);
+  lastResult = { correct, total: flat.length, pct, perSection, wrong };
+
+  document.getElementById("scoreNum").textContent = correct;
+  document.getElementById("scorePct").textContent = pct;
+  document.getElementById("scoreBox").classList.remove("hidden");
+  document.getElementById("sideActions").classList.remove("hidden");
+  document.getElementById("checkHint").textContent =
+    `You scored ${correct} / ${flat.length} (${pct}%). Wrong answers are marked in red with the correct answer. Fix them, watch again, and re-check if you like.`;
+
+  lastResult.perSection.forEach((s, si) => {
+    const el = document.querySelector(`[data-navcount="${si}"]`);
+    if (!el) return;
+    el.dataset.graded = "1";
+    el.textContent = s.got + "/" + s.total;
+    el.classList.remove("text-slate-400");
+    el.classList.add(s.got === s.total ? "text-green-600" : "text-red-600");
+  });
+
+  const firstWrong = wrong.length ? quizEl.querySelector(`.q[data-no="${wrong[0]}"]`) : null;
+  const target = firstWrong || document.getElementById("scoreBox");
+  if (target && target.scrollIntoView) target.scrollIntoView({ behavior:"smooth", block:"center" });
+}
+
+function resultsText(){
+  if (!lastResult) return "";
+  const d = collect();
+  const lines = [];
+  lines.push("The History of the Spreadsheet — Video Task");
+  lines.push("Name:  " + (d.name || "(not given)"));
+  lines.push("Class: " + (d.cls || "(not given)"));
+  lines.push("Date:  " + new Date().toLocaleString());
+  lines.push("");
+  lines.push(`SCORE: ${lastResult.correct} / ${lastResult.total}  (${lastResult.pct}%)`);
+  lines.push("");
+  lines.push("By section:");
+  lastResult.perSection.forEach(s => lines.push(`  ${s.got}/${s.total}  ${s.title}`));
+  lines.push("");
+  lines.push(lastResult.wrong.length
+    ? "Questions still to review: " + lastResult.wrong.join(", ")
+    : "All questions correct.");
+  return lines.join("\n");
+}
+
+document.getElementById("checkBtnSide").addEventListener("click", grade);
+document.getElementById("checkBtnMain").addEventListener("click", grade);
+document.getElementById("printBtn").addEventListener("click", () => window.print());
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const txt = resultsText();
+  try {
+    await navigator.clipboard.writeText(txt);
+    document.getElementById("copyBtn").textContent = "Copied ✓";
+    setTimeout(() => document.getElementById("copyBtn").textContent = "Copy results", 2000);
+  } catch(e) {
+    window.prompt("Copy your results:", txt);
+  }
+});
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("Clear all your answers on this device? This cannot be undone.")) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  location.reload();
+});
+
+restore();
+</script>
+</body>
+</html>
