@@ -40,8 +40,10 @@
     <p class="mt-2 text-slate-600 max-w-3xl">
       Watch the TED talk <em>“Meet the inventor of the electronic spreadsheet”</em> by <strong>Dan Bricklin</strong>
       and answer the questions as you go. It is fine to pause and rewind — in fact, you should.
-      When you have finished, press <strong>Check my answers</strong> at the bottom, then follow your teacher's
-      instructions for handing it in (screenshot your score, or use <strong>Copy results</strong> / <strong>Print</strong>).
+      The questions are in <strong>6 parts</strong> that follow the story. <strong>Check each part</strong> as
+      you finish that bit of the video — you'll get your answers back straight away. At the end,
+      hand it in the way your teacher asked (screenshot your score, or use
+      <strong>Copy results</strong> / <strong>Print</strong>).
     </p>
   </header>
 
@@ -90,12 +92,13 @@
           </div>
 
           <div id="scoreBox" class="hidden rounded-lg bg-blue-50 border border-blue-200 p-3 text-center">
+            <div id="scoreLabel" class="text-[0.7rem] font-bold uppercase tracking-wide text-blue-500">So far</div>
             <div class="text-3xl font-extrabold text-blue-800"><span id="scoreNum">0</span> / <span id="scoreDen">0</span></div>
             <div class="text-blue-700 font-semibold"><span id="scorePct">0</span>%</div>
           </div>
 
           <button id="checkBtnSide" class="w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5">
-            Check my answers
+            Check all 6 parts now
           </button>
           <div id="sideActions" class="hidden grid grid-cols-2 gap-2">
             <button id="copyBtn" class="rounded-lg bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold py-2">Copy results</button>
@@ -105,7 +108,7 @@
         </div>
 
         <nav class="bg-white rounded-xl shadow p-3 no-print hidden lg:block">
-          <p class="px-1 pb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Jump to a section</p>
+          <p class="px-1 pb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Jump to a part</p>
           <ul id="sectionNavList" class="space-y-0.5 text-sm"></ul>
         </nav>
       </div>
@@ -117,10 +120,11 @@
 
       <div class="mt-8 bg-white rounded-xl shadow p-5 no-print">
         <button id="checkBtnMain" class="w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold py-3">
-          Check my answers
+          Check everything &amp; show my results
         </button>
         <p id="checkHint" class="mt-2 text-center text-sm text-slate-500">
-          You can check as many times as you like. Your answers are saved in this browser automatically.
+          Best to check each part as you go, using the button under that part. Your answers
+          save automatically in this browser, and you can re-check any part as many times as you like.
         </p>
       </div>
     </div>
@@ -140,68 +144,52 @@
 // ---------------------------------------------------------------------------
 const SECTIONS = [
   {
-    title: "1. Before we start — what VisiCalc changed",
-    time: "≈ 0:00–1:30",
+    title: "Part 1 — The invention that changed the world",
+    time: "≈ 0:00–1:40",
     questions: [
       { type:"mc", q:"Dan opens by asking who has ever run a business using a spreadsheet done by hand — like whom?",
         options:["His old professor at MIT","His dad, for his small printing business in Philadelphia","Steve Jobs","His friend Bob Frankston"], answer:1 },
+      { type:"text", q:"Dan's father ran his printing business in which US city?",
+        hint:"a city", accept:["philadelphia","philly"], answer:"Philadelphia" },
+      { type:"tf", q:"Doing a business's calculations on a spreadsheet by hand was a brand-new idea in the 1970s.",
+        options:["True","False"], answer:1 },
       { type:"text", q:"The idea Dan started working on in early 1978 eventually became ______.",
         hint:"one word — the product name", accept:["visicalc","visi calc"], answer:"VisiCalc" },
       { type:"text", q:"VisiCalc first shipped running on a new personal computer: the Apple ______.",
         hint:"a number", accept:["ii","2","two","apple ii","apple 2"], answer:"II (the Apple II)" },
       { type:"mc", q:"Six years later, which newspaper ran an editorial that assumed readers already knew what VisiCalc was?",
         options:["The New York Times","The Wall Street Journal","The Kansas City Star","The Boston Globe"], answer:1 },
+      { type:"tf", q:"That editorial, six years on, still had to carefully explain what VisiCalc was.",
+        options:["True","False"], answer:1 },
       { type:"mc", q:"In 1990, who said VisiCalc “propelled the success of Apple more than any other single event”?",
         options:["Bill Gates","Dan Bricklin","Steve Jobs","Bob Frankston"], answer:2 },
       { type:"tf", q:"Steve Jobs said that if VisiCalc had been written for some other computer, “you'd be interviewing somebody else right now.”",
         options:["True","False"], answer:0 },
-      { type:"text", q:"Dan says VisiCalc was key to getting personal computers onto ______ desks.",
+      { type:"text", q:"Dan says VisiCalc was the key to getting personal computers onto ______ desks.",
         hint:"one word", accept:["business"], answer:"business" },
     ]
   },
   {
-    title: "2. Young Dan — MIT and Multics",
-    time: "≈ 1:30–3:00",
+    title: "Part 2 — Before business school: a programmer's path",
+    time: "≈ 1:40–5:40",
     questions: [
       { type:"text", q:"In what year did Dan first learn to program?",
         hint:"a year", accept:["1966"], answer:"1966" },
-      { type:"text", q:"How old was Dan when he learned to program?",
-        hint:"a number", accept:["15","fifteen"], answer:"15" },
       { type:"mc", q:"Before going to college, Dan mentions “sleeping in the mud” at which event?",
         options:["A Scout camp","Woodstock","An MIT hackathon","A computer fair"], answer:1 },
       { type:"text", q:"At MIT, to earn money, Dan worked on the ______ Project.",
         hint:"one word", accept:["multics"], answer:"Multics" },
       { type:"mc", q:"Which two well-known operating systems does Dan say came out of Multics?",
         options:["Windows and DOS","Linux and Unix","macOS and iOS","Android and Chrome OS"], answer:1 },
-      { type:"text", q:"Multics was a trailblazing interactive ______ system.",
-        hint:"two words (with a hyphen)", accept:["time sharing","timesharing"], answer:"time-sharing" },
-      { type:"mc", q:"The interpreted computer languages Dan worked on were used by people in which kind of fields?",
-        options:["Computer science fields","Non-computer fields, to do calculations at a terminal","Only maths research","Government spy agencies"], answer:1 },
-    ]
-  },
-  {
-    title: "3. Working at Digital Equipment Corporation (DEC)",
-    time: "≈ 3:00–4:30",
-    questions: [
-      { type:"text", q:"“Digital Equipment Corporation” is usually shortened to ______.",
+      { type:"text", q:"“Digital Equipment Corporation”, where Dan worked next, is usually shortened to ______.",
         hint:"three letters", accept:["dec","digital equipment corporation"], answer:"DEC" },
       { type:"mc", q:"At DEC, Dan first worked on software for which new area?",
         options:["Computerized typesetting","Video games","Electronic spreadsheets","Air-traffic control"], answer:0 },
       { type:"text", q:"He helped newspapers replace their reporters' ______ with computer terminals.",
         hint:"one word", accept:["typewriters","typewriter"], answer:"typewriters" },
-      { type:"mc", q:"He went out “into the field” to train users and get feedback at which newspaper?",
-        options:["The New York Times","The Wall Street Journal","The Kansas City Star","The Philadelphia Inquirer"], answer:2 },
-      { type:"tf", q:"Dan was project leader for the software of DEC's first word processor.",
-        options:["True","False"], answer:0 },
-      { type:"text", q:"For typesetting and word processing, the user interface had to be both natural and ______ for non-computer people.",
-        hint:"one word", accept:["efficient"], answer:"efficient" },
-    ]
-  },
-  {
-    title: "4. Deciding to go to business school",
-    time: "≈ 4:30–5:40",
-    questions: [
-      { type:"mc", q:"After DEC, Dan joined a small company that made microprocessor-based electronic cash registers for which industry?",
+      { type:"mc", q:"When building software for non-computer people like reporters and typists, what did Dan say mattered most?",
+        options:["Writing the fastest possible code","A user interface that was natural and efficient to use","Adding as many features as possible","Keeping the price low"], answer:1 },
+      { type:"mc", q:"After DEC, Dan joined a small company that made electronic cash registers for which industry?",
         options:["Supermarkets","The fast-food industry","Petrol stations","Banks"], answer:1 },
       { type:"text", q:"Dan had always wanted to start a company with his friend Bob ______.",
         hint:"surname", accept:["frankston"], answer:"Frankston" },
@@ -209,12 +197,10 @@ const SECTIONS = [
         options:["At Harvard Business School","At DEC","On the Multics project at MIT","At Woodstock"], answer:2 },
       { type:"text", q:"In the autumn of which year did Dan enter the MBA program at Harvard Business School?",
         hint:"a year", accept:["1977"], answer:"1977" },
-      { type:"tf", q:"Dan was one of only a small percentage of students there who had a background in computer programming.",
-        options:["True","False"], answer:0 },
     ]
   },
   {
-    title: "5. Learning by the case method",
+    title: "Part 3 — Business school, and the case method",
     time: "≈ 5:40–7:15",
     questions: [
       { type:"text", q:"At Harvard, students learned by the ______ method.",
@@ -225,21 +211,25 @@ const SECTIONS = [
         options:["A single page","Up to a few dozen pages","Around 200 pages","One paragraph"], answer:1 },
       { type:"text", q:"Cases often included ______ — pages of words and numbers laid out for that particular situation.",
         hint:"one word, plural", accept:["exhibits","exhibit"], answer:"exhibits" },
+      { type:"tf", q:"Dan's class did the case calculations mostly in their heads, without calculators.",
+        options:["True","False"], answer:1 },
       { type:"mc", q:"For Halloween, Dan dressed up as a ______.",
         options:["Mainframe","Calculator","Spreadsheet","Professor"], answer:1 },
-      { type:"text", q:"A student would dictate information that the professor wrote onto the many motorized ______ at the front of the class.",
+      { type:"mc", q:"When a student presented a case, what did they actually do?",
+        options:["Gave a slideshow","Explained the situation and dictated information for the professor to write on the blackboards","Handed in a written report","Taught the whole lesson"], answer:1 },
+      { type:"text", q:"The professor wrote the dictated information onto the many motorized ______ at the front of the class.",
         hint:"one word, plural", accept:["blackboards","blackboard","chalkboards","chalkboard"], answer:"blackboards" },
       { type:"tf", q:"Students were graded partly on class participation.",
         options:["True","False"], answer:0 },
-      { type:"text", q:"How many OTHER people were in Dan's class (sitting there with him)?",
+      { type:"text", q:"How many OTHER people were in Dan's class, sitting there with him?",
         hint:"a number", accept:["87","eighty seven","eighty-seven"], answer:"87" },
       { type:"mc", q:"What did Dan find really frustrating about doing the homework by hand?",
         options:["It took him all night","One early mistake made all the other numbers wrong, so he couldn't take part as well","The professor kept losing his work","His calculator ran out of battery"], answer:1 },
     ]
   },
   {
-    title: "6. The daydream — imagining the tool",
-    time: "≈ 7:15–8:40",
+    title: "Part 4 — The daydream, and learning to prototype",
+    time: "≈ 7:15–9:20",
     questions: [
       { type:"mc", q:"Most programmers in those days worked on mainframes, building things like:",
         options:["Websites and apps","Inventory, payroll and bill-paying systems","Video games","Spreadsheets"], answer:1 },
@@ -253,13 +243,7 @@ const SECTIONS = [
         options:["A fighter plane","A car","A cinema","A submarine"], answer:0 },
       { type:"text", q:"In the middle of a negotiation, he pictured circling some numbers and pressing the ______ button.",
         hint:"one word — an operation", accept:["sum","add","total"], answer:"sum" },
-    ]
-  },
-  {
-    title: "7. Prototyping",
-    time: "≈ 8:40–9:20",
-    questions: [
-      { type:"mc", q:"Who taught Dan about prototyping (making a simple working version first)?",
+      { type:"mc", q:"Who taught Dan about prototyping — making a simple working version first?",
         options:["His MIT professor","His father","Bob Frankston","Steve Jobs"], answer:1 },
       { type:"text", q:"Dan's dad made mock-ups to plan the layout of the ______ he was printing.",
         hint:"one word, plural — printed booklets", accept:["brochures","brochure"], answer:"brochures" },
@@ -267,12 +251,12 @@ const SECTIONS = [
         options:["True","False"], answer:0 },
       { type:"mc", q:"According to Dan, making a simple working version of what you're building forces you to:",
         options:["Spend more money","Uncover the key problems early, and solve them more cheaply","Finish the product faster","Skip the design stage"], answer:1 },
-      { type:"mc", q:"Dan built his prototype on a video terminal connected to:",
+      { type:"mc", q:"Dan built his first prototype on a video terminal connected to:",
         options:["An Apple II","Harvard's time-sharing system","The MIT Multics system","A DEC word processor"], answer:1 },
     ]
   },
   {
-    title: "8. The hard design problem — naming things",
+    title: "Part 5 — The hard problem: how do you name a cell?",
     time: "≈ 9:20–11:00",
     questions: [
       { type:"text", q:"One of the first problems Dan ran into was: how do you represent ______ inside formulas?",
@@ -300,15 +284,11 @@ const SECTIONS = [
     ]
   },
   {
-    title: "9. Building VisiCalc with Bob",
-    time: "≈ 11:00–12:20",
+    title: "Part 6 — Building VisiCalc, and showing the world",
+    time: "≈ 11:00–end",
     questions: [
-      { type:"text", q:"Dan wrote a ______ card to act as the documentation and to check the design could be explained clearly.",
-        hint:"one word", accept:["reference"], answer:"reference" },
       { type:"mc", q:"Where did Bob Frankston actually write the code?",
         options:["A Harvard computer lab","The attic of his rented apartment in Arlington, Massachusetts","An office at MIT","Dan's dad's print shop"], answer:1 },
-      { type:"text", q:"Bob bought time on the MIT ______ System to write the computer code.",
-        hint:"one word — same system as before", accept:["multics"], answer:"Multics" },
       { type:"mc", q:"How did Bob get the test versions onto the borrowed Apple II?",
         options:["On a floppy disk","Over a phone line, using an acoustic coupler","By typing it all in by hand","On a cassette tape"], answer:1 },
       { type:"mc", q:"Which class case was Dan preparing when Print and Save weren't working yet?",
@@ -319,24 +299,14 @@ const SECTIONS = [
         options:["True","False"], answer:0 },
       { type:"mc", q:"When the professor asked why he hadn't used a ratio, what was the real reason Dan didn't say out loud?",
         options:["Ratios weren't on the syllabus","Divide wasn't working yet","He had forgotten how","He had run out of time"], answer:1 },
-    ]
-  },
-  {
-    title: "10. Launch and legacy",
-    time: "≈ 12:20–end",
-    questions: [
       { type:"mc", q:"Who printed the sample reference card that was used as marketing material?",
         options:["Harvard","Dan's dad","Apple","The publisher"], answer:1 },
-      { type:"text", q:"In which year was VisiCalc both announced to the world and then shipped?",
-        hint:"a year", accept:["1979"], answer:"1979" },
-      { type:"mc", q:"VisiCalc was announced at the giant National Computer Conference in which city?",
+      { type:"mc", q:"VisiCalc was announced in June 1979 at the giant National Computer Conference in which city?",
         options:["Boston","San Francisco","New York City","Philadelphia"], answer:2 },
       { type:"mc", q:"Which newspaper's article ended with the line “All hail VISICALC”?",
         options:["The Wall Street Journal","The New York Times","The Boston Globe","The Kansas City Star"], answer:1 },
-      { type:"text", q:"After that, the electronic spreadsheet was not mentioned in the popular business press for about ______ years.",
+      { type:"text", q:"After the announcement, the electronic spreadsheet was not mentioned in the popular business press for about ______ years — most people didn't get it yet.",
         hint:"a number", accept:["two","2","two years","2 years"], answer:"two" },
-      { type:"mc", q:"In which month of 1979 did VisiCalc actually ship?",
-        options:["January","June","October","December"], answer:2 },
       { type:"text", q:"Harvard later put up a ______ in that classroom to commemorate what happened there.",
         hint:"one word — a commemorative sign", accept:["plaque"], answer:"plaque" },
       { type:"mc", q:"Dan's closing advice: take your unique background, skills and needs and build ______ to discover the key problems — and change the world.",
@@ -421,11 +391,19 @@ SECTIONS.forEach((sec, si) => {
   });
 
   secWrap.appendChild(list);
+
+  const footer = document.createElement("div");
+  footer.className = "mt-5 border-t border-slate-200 pt-4";
+  footer.innerHTML = `
+    <button class="check-sec w-full sm:w-auto rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2.5"
+      data-si="${si}">Check Part ${si + 1} &nbsp;·&nbsp; ${sec.questions.length} questions</button>
+    <p class="sec-result hidden mt-3 rounded-lg p-3 text-sm font-semibold"></p>`;
+  secWrap.appendChild(footer);
+
   quizEl.appendChild(secWrap);
 });
 
 document.getElementById("totalCount").textContent = flat.length;
-document.getElementById("scoreDen").textContent = flat.length;
 
 // ---- persistence ----
 function collect(){
@@ -494,73 +472,114 @@ quizEl.addEventListener("change", save);
 document.getElementById("studentName").addEventListener("input", save);
 document.getElementById("studentClass").addEventListener("input", save);
 
-// ---- grading ----
+// ---- grading (one part at a time) ----
 let lastResult = null;
+const checkedSections = new Set();   // section indices that have been checked
+const qCorrect = {};                 // global question no -> true/false (checked only)
 
-function grade(){
-  let correct = 0;
-  const perSection = SECTIONS.map(s => ({ title:s.title, got:0, total:s.questions.length }));
-  const wrong = [];
+function gradeQuestion(no, q){
+  const card = quizEl.querySelector(`.q[data-no="${no}"]`);
+  const fb = card.querySelector(".feedback");
+  let isCorrect = false, given = "";
 
-  flat.forEach(({no, si, q}) => {
-    const card = quizEl.querySelector(`.q[data-no="${no}"]`);
-    const fb = card.querySelector(".feedback");
-    let isCorrect = false;
-    let given = "";
+  if (q.type === "text") {
+    const el = card.querySelector(`input[name="q${no}"]`);
+    given = el ? el.value : "";
+    const g = normalise(given);
+    isCorrect = g.length > 0 && q.accept.some(a => normalise(a) === g);
+  } else {
+    const el = card.querySelector(`input[name="q${no}"]:checked`);
+    given = el ? q.options[+el.value] : "";
+    isCorrect = !!el && (+el.value === q.answer);
+  }
 
-    if (q.type === "text") {
-      const el = card.querySelector(`input[name="q${no}"]`);
-      given = el ? el.value : "";
-      const g = normalise(given);
-      isCorrect = g.length > 0 && q.accept.some(a => normalise(a) === g);
-    } else {
-      const el = card.querySelector(`input[name="q${no}"]:checked`);
-      given = el ? q.options[+el.value] : "";
-      isCorrect = el && (+el.value === q.answer);
-    }
+  qCorrect[no] = isCorrect;
+  card.classList.remove("correct","incorrect");
+  card.classList.add(isCorrect ? "correct" : "incorrect");
+  if (isCorrect) {
+    fb.textContent = "✓ Correct";
+  } else {
+    const right = (q.type === "text") ? q.answer : q.options[q.answer];
+    fb.textContent = given.trim()
+      ? `✗ Not quite. Correct answer: ${right}`
+      : `✗ No answer given. Correct answer: ${right}`;
+  }
+  return isCorrect;
+}
 
-    card.classList.remove("correct","incorrect");
-    if (isCorrect) {
-      card.classList.add("correct");
-      fb.textContent = "✓ Correct";
-      correct++;
-      perSection[si].got++;
-    } else {
-      card.classList.add("incorrect");
-      const right = (q.type === "text") ? q.answer : q.options[q.answer];
-      fb.textContent = given.trim()
-        ? `✗ Not quite. Correct answer: ${right}`
-        : `✗ No answer given. Correct answer: ${right}`;
-      wrong.push(no);
-    }
-  });
+function sectionScore(si){
+  const qs = flat.filter(f => f.si === si);
+  return { got: qs.filter(f => qCorrect[f.no]).length, total: qs.length };
+}
 
-  const pct = Math.round((correct / flat.length) * 100);
-  lastResult = { correct, total: flat.length, pct, perSection, wrong };
+function gradeSection(si){
+  flat.filter(f => f.si === si).forEach(({no, q}) => gradeQuestion(no, q));
+  checkedSections.add(si);
 
-  document.getElementById("scoreNum").textContent = correct;
+  const { got, total } = sectionScore(si);
+  const out = document.getElementById("sec-" + si).querySelector(".sec-result");
+  out.classList.remove("hidden");
+  out.className = "sec-result mt-3 rounded-lg p-3 text-sm font-semibold border "
+    + (got === total ? "bg-green-50 text-green-800 border-green-200"
+                     : "bg-amber-50 text-amber-900 border-amber-200");
+  out.textContent = got === total
+    ? `All correct in this part — ${got} / ${total}. On to the next part of the story.`
+    : `${got} / ${total} in this part. Fix the ones marked in red (re-watch that bit of the video if you need to), then carry on — you can check again.`;
+
+  const nav = document.querySelector(`[data-navcount="${si}"]`);
+  if (nav) {
+    nav.dataset.graded = "1";
+    nav.textContent = got + "/" + total;
+    nav.classList.remove("text-slate-400","text-green-600","text-red-600");
+    nav.classList.add(got === total ? "text-green-600" : "text-red-600");
+  }
+
+  refreshTotals();
+}
+
+function refreshTotals(){
+  let got = 0, tot = 0;
+  checkedSections.forEach(si => { const s = sectionScore(si); got += s.got; tot += s.total; });
+  const pct = tot ? Math.round(got / tot * 100) : 0;
+  const allDone = checkedSections.size === SECTIONS.length;
+
+  document.getElementById("scoreBox").classList.toggle("hidden", checkedSections.size === 0);
+  document.getElementById("scoreLabel").textContent = allDone
+    ? "Final score" : `So far · ${checkedSections.size} of ${SECTIONS.length} parts checked`;
+  document.getElementById("scoreNum").textContent = got;
+  document.getElementById("scoreDen").textContent = tot;
   document.getElementById("scorePct").textContent = pct;
-  document.getElementById("scoreBox").classList.remove("hidden");
-  document.getElementById("sideActions").classList.remove("hidden");
-  document.getElementById("checkHint").textContent =
-    `You scored ${correct} / ${flat.length} (${pct}%). Wrong answers are marked in red with the correct answer. Fix them, watch again, and re-check if you like.`;
 
-  lastResult.perSection.forEach((s, si) => {
-    const el = document.querySelector(`[data-navcount="${si}"]`);
-    if (!el) return;
-    el.dataset.graded = "1";
-    el.textContent = s.got + "/" + s.total;
-    el.classList.remove("text-slate-400");
-    el.classList.add(s.got === s.total ? "text-green-600" : "text-red-600");
-  });
+  if (allDone) {
+    lastResult = buildResult();
+    document.getElementById("sideActions").classList.remove("hidden");
+    document.getElementById("checkHint").textContent =
+      `All ${SECTIONS.length} parts checked — final score ${got} / ${tot} (${pct}%). Hand it in with Copy results or Print.`;
+  } else {
+    document.getElementById("checkHint").textContent =
+      `Check each part as you finish that bit of the video. ${checkedSections.size} of ${SECTIONS.length} parts done — you can re-check any part.`;
+  }
+}
 
-  const firstWrong = wrong.length ? quizEl.querySelector(`.q[data-no="${wrong[0]}"]`) : null;
-  const target = firstWrong || document.getElementById("scoreBox");
+function gradeAll(){
+  SECTIONS.forEach((_, si) => gradeSection(si));
+  const firstWrong = flat.find(f => qCorrect[f.no] === false);
+  const target = firstWrong
+    ? quizEl.querySelector(`.q[data-no="${firstWrong.no}"]`)
+    : document.getElementById("scoreBox");
   if (target && target.scrollIntoView) target.scrollIntoView({ behavior:"smooth", block:"center" });
 }
 
+function buildResult(){
+  const perSection = SECTIONS.map((s, si) => ({ title:s.title, ...sectionScore(si) }));
+  const correct = perSection.reduce((a, s) => a + s.got, 0);
+  const total = flat.length;
+  const wrong = flat.filter(f => qCorrect[f.no] === false).map(f => f.no);
+  return { correct, total, pct: Math.round(correct / total * 100), perSection, wrong };
+}
+
 function resultsText(){
-  if (!lastResult) return "";
+  const r = lastResult || buildResult();
   const d = collect();
   const lines = [];
   lines.push("The History of the Spreadsheet — Video Task");
@@ -568,19 +587,31 @@ function resultsText(){
   lines.push("Class: " + (d.cls || "(not given)"));
   lines.push("Date:  " + new Date().toLocaleString());
   lines.push("");
-  lines.push(`SCORE: ${lastResult.correct} / ${lastResult.total}  (${lastResult.pct}%)`);
+  lines.push(`SCORE: ${r.correct} / ${r.total}  (${r.pct}%)`);
   lines.push("");
-  lines.push("By section:");
-  lastResult.perSection.forEach(s => lines.push(`  ${s.got}/${s.total}  ${s.title}`));
+  lines.push("By part:");
+  r.perSection.forEach(s => lines.push(`  ${s.got}/${s.total}  ${s.title}`));
   lines.push("");
-  lines.push(lastResult.wrong.length
-    ? "Questions still to review: " + lastResult.wrong.join(", ")
+  lines.push(r.wrong.length
+    ? "Questions still to review: " + r.wrong.join(", ")
     : "All questions correct.");
   return lines.join("\n");
 }
 
-document.getElementById("checkBtnSide").addEventListener("click", grade);
-document.getElementById("checkBtnMain").addEventListener("click", grade);
+quizEl.addEventListener("click", e => {
+  const btn = e.target.closest(".check-sec");
+  if (!btn) return;
+  const si = +btn.dataset.si;
+  gradeSection(si);
+  const firstWrong = flat.find(f => f.si === si && qCorrect[f.no] === false);
+  const target = firstWrong
+    ? quizEl.querySelector(`.q[data-no="${firstWrong.no}"]`)
+    : document.getElementById("sec-" + si).querySelector(".sec-result");
+  if (target && target.scrollIntoView) target.scrollIntoView({ behavior:"smooth", block:"center" });
+});
+
+document.getElementById("checkBtnSide").addEventListener("click", gradeAll);
+document.getElementById("checkBtnMain").addEventListener("click", gradeAll);
 document.getElementById("printBtn").addEventListener("click", () => window.print());
 document.getElementById("copyBtn").addEventListener("click", async () => {
   const txt = resultsText();
