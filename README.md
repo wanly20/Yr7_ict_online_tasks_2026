@@ -15,10 +15,15 @@ student can screenshot, copy or print.
 
 ## Assets
 
-`assets/` holds images used by tasks. Current files:
+`assets/` holds images used by tasks. Credits are shown in each task's footer.
+Current files (all resized/compressed):
 
 - `visicalc-1979.png` — VisiCalc screenshot, public domain (Wikimedia Commons).
-- `apple-ii.jpg` — Apple II photo by Rama & Musée Bolo, CC BY-SA 2.0 FR (background removed, resized). Credited in the task footer.
+- `apple-ii.jpg` — Apple II, Rama & Musée Bolo, CC BY-SA 2.0 FR (background removed).
+- `dan-bricklin.jpg` — Dan Bricklin portrait, Luca Lucarini, CC BY-SA 3.0.
+- `acoustic-coupler.jpg` — acoustic coupler, OlivierBerger, CC BY-SA 3.0.
+- `vt100-terminal.jpg` — DEC VT100 terminal, Jason Scott, CC BY 2.0.
+- `google-sheets-today.png` — Google Sheets screenshot (own).
 
 Keep images small (resize to ~1000px, compress) — students open these from home.
 

@@ -133,10 +133,17 @@
 
   <footer class="mt-10 text-center text-xs text-slate-400 space-y-1">
     <p>Video: “Meet the inventor of the electronic spreadsheet” by Dan Bricklin (TEDxBeaconStreet). Embedded from YouTube.</p>
-    <p>
-      VisiCalc screen: public domain, via Wikimedia Commons.
-      Apple II photo: © <a class="underline hover:text-slate-600" href="https://commons.wikimedia.org/wiki/File:Apple_II_tranparent_800.png" target="_blank" rel="noopener">Rama &amp; Musée Bolo</a>,
-      <a class="underline hover:text-slate-600" href="https://creativecommons.org/licenses/by-sa/2.0/fr/deed.en" target="_blank" rel="noopener">CC BY-SA 2.0 FR</a> (background removed, resized).
+    <p class="max-w-3xl mx-auto">
+      Images via Wikimedia Commons, resized/compressed for this page.
+      VisiCalc screen — public domain.
+      Apple II — © Rama &amp; Musée Bolo,
+      <a class="underline hover:text-slate-600" href="https://creativecommons.org/licenses/by-sa/2.0/fr/deed.en" target="_blank" rel="noopener">CC BY-SA 2.0 FR</a> (background removed).
+      Dan Bricklin — © Luca Lucarini,
+      <a class="underline hover:text-slate-600" href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>.
+      Acoustic coupler — © OlivierBerger, CC BY-SA 3.0.
+      DEC VT100 — © Jason Scott,
+      <a class="underline hover:text-slate-600" href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>.
+      Modern spreadsheet: Google Sheets screenshot.
     </p>
   </footer>
 </div>
@@ -153,7 +160,10 @@ const SECTIONS = [
     time: "≈ 0:00–1:40",
     questions: [
       { type:"mc", q:"Dan opens by asking who has ever run a business using a spreadsheet done by hand — like whom?",
-        options:["His old professor at MIT","His dad, for his small printing business in Philadelphia","Steve Jobs","His friend Bob Frankston"], answer:1 },
+        options:["His old professor at MIT","His dad, for his small printing business in Philadelphia","Steve Jobs","His friend Bob Frankston"], answer:1,
+        img:{ src:"assets/dan-bricklin.jpg",
+          alt:"Dan Bricklin, an older man with grey hair, glasses and a grey beard, speaking while seated in an armchair.",
+          caption:"Dan Bricklin, who tells this story in the video." } },
       { type:"text", q:"Dan's father ran his printing business in which US city?",
         hint:"a city", accept:["philadelphia","philly"], answer:"Philadelphia" },
       { type:"tf", q:"Doing a business's calculations on a spreadsheet by hand was a brand-new idea in the 1970s.",
@@ -263,7 +273,10 @@ const SECTIONS = [
       { type:"mc", q:"According to Dan, making a simple working version of what you're building forces you to:",
         options:["Spend more money","Uncover the key problems early, and solve them more cheaply","Finish the product faster","Skip the design stage"], answer:1 },
       { type:"mc", q:"Dan built his first prototype on a video terminal connected to:",
-        options:["An Apple II","Harvard's time-sharing system","The MIT Multics system","A DEC word processor"], answer:1 },
+        options:["An Apple II","Harvard's time-sharing system","The MIT Multics system","A DEC word processor"], answer:1,
+        img:{ src:"assets/vt100-terminal.jpg",
+          alt:"A 1970s DEC VT100 computer terminal: a beige screen-and-keyboard unit showing lines of white text on a dark screen.",
+          caption:"A terminal of the era (a DEC VT100) — a screen and keyboard with no computer of its own; it connected to a shared computer somewhere else." } },
     ]
   },
   {
@@ -293,7 +306,13 @@ const SECTIONS = [
       { type:"tf", q:"Even with the grid, you could still put any value or any formula into any cell.",
         options:["True","False"], answer:0 },
       { type:"mc", q:"Dan says spreadsheets still work this same way today — how long later?",
-        options:["About 10 years","About 20 years","Almost 40 years","Exactly 100 years"], answer:2 },
+        options:["About 10 years","About 20 years","Almost 40 years","Exactly 100 years"], answer:2,
+        compare:{ items:[
+          { src:"assets/visicalc-1979.png", label:"The first electronic spreadsheet",
+            alt:"A green-on-black Apple II screen showing a spreadsheet with columns A–D and numbered rows." },
+          { src:"assets/google-sheets-today.png", label:"A spreadsheet today",
+            alt:"A modern spreadsheet: a toolbar above a grid with columns A–G and numbered rows, cell C2 selected." } ],
+          caption:"Different screens, same idea — columns are letters, rows are numbers, every cell has an address, and changing one number updates the formulas that use it." } },
     ]
   },
   {
@@ -302,8 +321,11 @@ const SECTIONS = [
     questions: [
       { type:"mc", q:"Where did Bob Frankston actually write the code?",
         options:["A Harvard computer lab","The attic of his rented apartment in Arlington, Massachusetts","An office at MIT","Dan's dad's print shop"], answer:1 },
-      { type:"mc", q:"How did Bob get the test versions onto the borrowed Apple II?",
-        options:["On a floppy disk","Over a phone line, using an acoustic coupler","By typing it all in by hand","On a cassette tape"], answer:1 },
+      { type:"mc", q:"Bob wrote the code on a big computer at MIT, then sent test versions to the borrowed Apple II using the device below — an acoustic coupler. What does it do?",
+        options:["Stores the program on a floppy disk","Turns computer data into sound and sends it down an ordinary telephone handset","Charges the Apple II's battery","Prints the code onto paper tape"], answer:1,
+        img:{ src:"assets/acoustic-coupler.jpg",
+          alt:"An acoustic coupler: a boxy cream-coloured cradle with two round rubber cups, holding a telephone handset face-down.",
+          caption:"You dialled a phone, then pushed the handset into the two rubber cups. Data travelled as squealing tones — a few hundred characters per second." } },
       { type:"mc", q:"Which class case was Dan preparing when Print and Save weren't working yet?",
         options:["The Pepsi Challenge","The Coca-Cola case","The Apple case","The Woodstock case"], answer:0 },
       { type:"text", q:"Because Save didn't work, every time the program crashed Dan had to type in all of the ______ again.",
@@ -415,6 +437,17 @@ SECTIONS.forEach((sec, si) => {
       body += `<figure class="mt-3">
         ${gridDiagram(q.grid.col, q.grid.row, q.grid.label)}
         ${q.grid.caption ? `<figcaption class="mt-1 text-xs text-slate-400 max-w-xs">${q.grid.caption}</figcaption>` : ``}
+      </figure>`;
+    }
+    if (q.compare) {
+      body += `<figure class="mt-3 space-y-2">
+        ${q.compare.items.map(it => `
+          <div>
+            <div class="text-xs font-semibold text-slate-500 mb-1">${it.label}</div>
+            <img src="${it.src}" alt="${it.alt}" loading="lazy"
+              class="block max-w-full w-auto max-h-56 rounded-lg border border-slate-200 bg-white">
+          </div>`).join("")}
+        ${q.compare.caption ? `<figcaption class="text-xs text-slate-400">${q.compare.caption}</figcaption>` : ``}
       </figure>`;
     }
 
