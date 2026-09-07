@@ -131,8 +131,13 @@
 
   </div>
 
-  <footer class="mt-10 text-center text-xs text-slate-400">
-    Video: “Meet the inventor of the electronic spreadsheet” by Dan Bricklin (TEDxBeaconStreet). Embedded from YouTube.
+  <footer class="mt-10 text-center text-xs text-slate-400 space-y-1">
+    <p>Video: “Meet the inventor of the electronic spreadsheet” by Dan Bricklin (TEDxBeaconStreet). Embedded from YouTube.</p>
+    <p>
+      VisiCalc screen: public domain, via Wikimedia Commons.
+      Apple II photo: © <a class="underline hover:text-slate-600" href="https://commons.wikimedia.org/wiki/File:Apple_II_tranparent_800.png" target="_blank" rel="noopener">Rama &amp; Musée Bolo</a>,
+      <a class="underline hover:text-slate-600" href="https://creativecommons.org/licenses/by-sa/2.0/fr/deed.en" target="_blank" rel="noopener">CC BY-SA 2.0 FR</a> (background removed, resized).
+    </p>
   </footer>
 </div>
 
@@ -154,9 +159,15 @@ const SECTIONS = [
       { type:"tf", q:"Doing a business's calculations on a spreadsheet by hand was a brand-new idea in the 1970s.",
         options:["True","False"], answer:1 },
       { type:"text", q:"The idea Dan started working on in early 1978 eventually became ______.",
-        hint:"one word — the product name", accept:["visicalc","visi calc"], answer:"VisiCalc" },
-      { type:"text", q:"VisiCalc first shipped running on a new personal computer: the Apple ______.",
-        hint:"a number", accept:["ii","2","two","apple ii","apple 2"], answer:"II (the Apple II)" },
+        hint:"one word — the product name", accept:["visicalc","visi calc"], answer:"VisiCalc",
+        img:{ src:"assets/visicalc-1979.png",
+          alt:"A black-and-green Apple II screen showing a spreadsheet: columns A, B, C, D across the top, numbered rows down the side, and a small invoice with SUBTOTAL, TAX and TOTAL.",
+          caption:"The finished program running on an Apple II, 1979." } },
+      { type:"mc", q:"VisiCalc first shipped in 1979 running on which personal computer?",
+        options:["The IBM PC","The Apple II","The Commodore PET","The Sinclair ZX80"], answer:1,
+        img:{ src:"assets/apple-ii.jpg",
+          alt:"An Apple II computer: a beige machine with a keyboard, a monitor on top, and two Disk II floppy-disk drives.",
+          caption:"An Apple II with two disk drives — the kind of setup VisiCalc first ran on." } },
       { type:"mc", q:"Six years later, which newspaper ran an editorial that assumed readers already knew what VisiCalc was?",
         options:["The New York Times","The Wall Street Journal","The Kansas City Star","The Boston Globe"], answer:1 },
       { type:"tf", q:"That editorial, six years on, still had to carefully explain what VisiCalc was.",
@@ -274,7 +285,9 @@ const SECTIONS = [
       { type:"mc", q:"On Dan's grid, what went where?",
         options:["Numbers across the top, letters down the side","Letters across the top, numbers down the side","Colours across the top, numbers down the side","Letters both across the top and down the side"], answer:1 },
       { type:"text", q:"So if you saw the reference ______ in a formula, you'd know exactly where it was on the screen. (Dan's example: a letter followed by a number.)",
-        hint:"one letter + one number", accept:["b7"], answer:"B7" },
+        hint:"one letter + one number", accept:["b7"], answer:"B7",
+        grid:{ col:2, row:3, label:"C3",
+          caption:"Every cell has an address: its column letter, then its row number. Column C, row 3 → C3." } },
       { type:"mc", q:"Restricting things to a grid also opened up new abilities, such as:",
         options:["Adding pictures to cells","Being able to select ranges of cells","Printing in colour","Saving to the cloud"], answer:1 },
       { type:"tf", q:"Even with the grid, you could still put any value or any formula into any cell.",
@@ -330,6 +343,32 @@ function normalise(s){
     .replace(/^(the|a|an|about|around|approximately)\s+/,"");
 }
 
+// small inline spreadsheet-grid diagram (columns A–E, rows 1–8), one cell highlighted
+function gridDiagram(hlCol, hlRow, label){
+  const cols = ["A","B","C","D","E"], rows = 8;
+  const x0 = 24, y0 = 22, cw = 44, rh = 20;
+  const W = x0 + cols.length * cw, H = y0 + rows * rh;
+  let s = `<svg viewBox="0 0 ${W + 1} ${H + 1}" style="max-width:280px;width:100%;height:auto" role="img" `
+    + `aria-label="A spreadsheet grid with columns A to E and rows 1 to 8. Column ${cols[hlCol]}, row ${hlRow} is shaded and labelled ${label}.">`;
+  s += `<rect x="0.5" y="0.5" width="${W}" height="${H}" fill="#ffffff" stroke="#cbd5e1"/>`;
+  cols.forEach((c, i) => {
+    const on = i === hlCol;
+    s += `<rect x="${x0 + i * cw}" y="0" width="${cw}" height="${y0}" fill="${on ? "#2563eb" : "#f1f5f9"}" stroke="#cbd5e1"/>`
+      + `<text x="${x0 + i * cw + cw / 2}" y="15" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="${on ? "#ffffff" : "#64748b"}">${c}</text>`;
+  });
+  for (let r = 1; r <= rows; r++){
+    const on = r === hlRow, y = y0 + (r - 1) * rh;
+    s += `<rect x="0" y="${y}" width="${x0}" height="${rh}" fill="${on ? "#2563eb" : "#f1f5f9"}" stroke="#cbd5e1"/>`
+      + `<text x="${x0 / 2}" y="${y + rh / 2 + 4}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="${on ? "#ffffff" : "#64748b"}">${r}</text>`;
+    cols.forEach((c, i) => {
+      const cell = i === hlCol && r === hlRow;
+      s += `<rect x="${x0 + i * cw}" y="${y}" width="${cw}" height="${rh}" fill="${cell ? "#bfdbfe" : "#ffffff"}" stroke="#e2e8f0"/>`;
+      if (cell) s += `<text x="${x0 + i * cw + cw / 2}" y="${y + rh / 2 + 4}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="800" fill="#1e3a8a">${label}</text>`;
+    });
+  }
+  return s + `</svg>`;
+}
+
 // build DOM
 const navList = document.getElementById("sectionNavList");
 let counter = 0;
@@ -364,6 +403,20 @@ SECTIONS.forEach((sec, si) => {
     card.dataset.no = no;
 
     let body = `<p class="font-semibold text-slate-800"><span class="text-blue-600">Q${no}.</span> ${q.q}</p>`;
+
+    if (q.img) {
+      body += `<figure class="mt-3">
+        <img src="${q.img.src}" alt="${q.img.alt}" loading="lazy"
+          class="block rounded-lg border border-slate-200 bg-white max-h-72 w-auto max-w-full">
+        ${q.img.caption ? `<figcaption class="mt-1 text-xs text-slate-400">${q.img.caption}</figcaption>` : ``}
+      </figure>`;
+    }
+    if (q.grid) {
+      body += `<figure class="mt-3">
+        ${gridDiagram(q.grid.col, q.grid.row, q.grid.label)}
+        ${q.grid.caption ? `<figcaption class="mt-1 text-xs text-slate-400 max-w-xs">${q.grid.caption}</figcaption>` : ``}
+      </figure>`;
+    }
 
     if (q.type === "mc" || q.type === "tf") {
       body += `<div class="mt-3 space-y-2">`;

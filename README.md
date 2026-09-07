@@ -13,6 +13,15 @@ student can screenshot, copy or print.
 |---|------|-------|
 | 1 | The History of the Spreadsheet | Dan Bricklin TED talk (YouTube embed) |
 
+## Assets
+
+`assets/` holds images used by tasks. Current files:
+
+- `visicalc-1979.png` — VisiCalc screenshot, public domain (Wikimedia Commons).
+- `apple-ii.jpg` — Apple II photo by Rama & Musée Bolo, CC BY-SA 2.0 FR (background removed, resized). Credited in the task footer.
+
+Keep images small (resize to ~1000px, compress) — students open these from home.
+
 ## Adding a task
 
 1. Drop `NN_<slug>.html` into the repo root (self-contained — Tailwind via CDN is fine).
